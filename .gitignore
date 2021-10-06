@@ -5,3 +5,5 @@ redis/data
 # ignore log files
 *.log
 logs
+
+redisinsight/*
