@@ -1,0 +1,7 @@
+mysql/data
+
+redis/data
+
+# ignore log files
+*.log
+logs
