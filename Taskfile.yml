@@ -1,0 +1,34 @@
+version: '3'
+
+tasks:
+  init:
+    cmds:
+      - rm -rf ./infra/mysql/data
+      - rm -rf ./infra/mysql/logs
+      - rm -rf ./infra/nginx/logs
+      - rm -rf ./infra/redis
+      - rm -rf ./tools/minio
+      - rm -rf ./tools/redisinsight
+      - rm -rf ./tools/schemaspy/output
+      - docker compose build --no-cache
+  build:
+    cmds:
+      - docker compose build
+  build:no-cache:
+    cmds:
+      - docker compose build --no-cache
+  up:
+    cmds:
+      - docker compose up
+  up:d:
+    cmds:
+      - docker compose up -d
+  stop:
+    cmds:
+      - docker compose stop
+  down:
+    cmds:
+      - docker compose down
+  ps:
+    cmds:
+      - docker compose ps

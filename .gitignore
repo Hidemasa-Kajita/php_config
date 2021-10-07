@@ -8,6 +8,8 @@ tools/redisinsight/*
 
 tools/minio/*
 
+.env
+
 # ignore log files
 *.log
 logs
