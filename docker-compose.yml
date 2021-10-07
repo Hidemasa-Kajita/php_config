@@ -1,6 +1,8 @@
 version: '3'
 services:
-  web:
+  # web server
+  nginx:
+    container_name: nginx
     build: ./nginx
     volumes:
       - php-fpm-socket:/var/run/php-fpm
@@ -9,18 +11,24 @@ services:
       - ./project/html:/var/www/html
       - ./nginx/logs:/var/log/nginx
     ports:
-      - "8080:80"
+      - 8080:80
     restart: always
+
+  # backend
   php:
+    container_name: php
     build: ./php
     volumes:
       - php-fpm-socket:/var/run/php-fpm 
       - ./project/html:/var/www/html
     restart: always
-  db:
+
+  # DB server
+  mysql:
+    container_name: mysql
     image: mysql:8.0
     ports:
-      - "13306:3306"
+      - 13306:3306
     environment:
       MYSQL_ROOT_PASSWORD: p@ssw0rd
       MYSQL_DATABASE: test
@@ -32,20 +40,26 @@ services:
       - ./mysql/conf/my.cnf:/etc/mysql/conf.d/my.cnf
       - ./mysql/logs:/var/log/mysql
     restart: always
+
+  # cache DB
   redis:
+    container_name: redis
     image: redis:alpine
     ports:
-      - "16379:6379"
+      - 16379:6379
     volumes:
       - ./redis/data:/data
 
+  # redis client
   redisinsight:
+    container_name: redisinsight
     image: redislabs/redisinsight:latest
     ports:
       - 8001:8001
     volumes:
       - ./redisinsight:/db
 
+  # DB client
   adminer:
     container_name: adminer
     hostname: adminer
@@ -54,20 +68,22 @@ services:
     ports:
       - 8002:8080
     links:
-      - db
+      - mysql
 
+  # DBにテーブルがない時は生成に失敗する
+  # DB schema
   schemaspy:
+    container_name: schemaspy
     image: schemaspy/schemaspy:snapshot
     volumes:
       - ./schemaspy/output:/output
       - ./schemaspy/config:/config
       - ./schemaspy/driver:/drivers
-    container_name: "schemaspy"
-    command: ["-configFile", "/config/schemaspy.properties"]
+    command: ['-configFile', '/config/schemaspy.properties']
     depends_on:
-      - db
+      - mysql
     links:
-      - db
+      - mysql
 
 volumes:
   php-fpm-socket:
