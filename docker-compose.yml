@@ -12,8 +12,17 @@ services:
       - ./project/html:/var/www/html
       - ./infra/nginx/logs:/var/log/nginx
     ports:
-      - 8080:80
+      - 8000:80
     restart: always
+
+  # web server for schemaspy
+  nginx_schemaspy:
+    image: nginx
+    container_name: nginx_schemaspy
+    ports:
+      - 8002:80
+    volumes:
+      - ./tools/schemaspy/output:/usr/share/nginx/html:ro
 
   # backend
   php:
@@ -67,7 +76,7 @@ services:
     image: adminer:latest
     restart: always
     ports:
-      - 8002:8080
+      - 8003:8080
     links:
       - mysql
 
