@@ -12,7 +12,7 @@ services:
       - ./project/html:/var/www/html
       - ./infra/nginx/logs:/var/log/nginx
     ports:
-      - 8000:80
+      - 8000:8000
     restart: always
 
   # web server for schemaspy
@@ -87,6 +87,34 @@ services:
     ports:
       - "8025:8025"
       - "1025:1025"
+
+  # object storage
+  # minio:
+  #   container_name: minio
+  #   image: minio/minio:latest
+  #   ports:
+  #     - 8004:9000
+  #   volumes:
+  #     - ./tools/minio/data:/export
+  #     - ./tools/minio/config:/root/.minio
+  #   environment:
+  #     MINIO_ACCESS_KEY: minio_access_key
+  #     MINIO_SECRET_KEY: minio_secret_key
+  #   command: server /export 
+
+  # create bucket
+  # createbuckets:
+  #   container_name: createbuckets
+  #   image: minio/mc
+  #   depends_on:
+  #     - minio
+  #   entrypoint: >
+  #     /bin/sh -c "
+  #     until (/usr/bin/mc config host add myminio http://minio:9000 minio_access_key minio_secret_key) do echo '...waiting...' && sleep 1; done;
+  #     /usr/bin/mc mb myminio/bucket;
+  #     /usr/bin/mc policy download myminio/bucket;
+  #     exit 0;
+  #     "
 
   # DBにテーブルがない時は生成に失敗する
   # DB schema
