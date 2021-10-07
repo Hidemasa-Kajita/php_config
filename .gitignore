@@ -2,7 +2,7 @@ mysql/data
 
 redis/data
 
-schemaspy/
+schemaspy/output
 
 # ignore log files
 *.log
