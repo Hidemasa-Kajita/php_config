@@ -11,17 +11,13 @@ services:
     ports:
       - "8080:80"
     restart: always
-    depends_on:
-      - php
-      - mysql
-      - redis
   php:
     build: ./php
     volumes:
       - php-fpm-socket:/var/run/php-fpm 
       - ./project/html:/var/www/html
     restart: always
-  mysql:
+  db:
     image: mysql:8.0
     ports:
       - "13306:3306"
@@ -49,6 +45,29 @@ services:
       - 8001:8001
     volumes:
       - ./redisinsight:/db
+
+  adminer:
+    container_name: adminer
+    hostname: adminer
+    image: adminer:latest
+    restart: always
+    ports:
+      - 8002:8080
+    links:
+      - db
+
+  schemaspy:
+    image: schemaspy/schemaspy:snapshot
+    volumes:
+      - ./schemaspy/output:/output
+      - ./schemaspy/config:/config
+      - ./schemaspy/driver:/drivers
+    container_name: "schemaspy"
+    command: ["-configFile", "/config/schemaspy.properties"]
+    depends_on:
+      - db
+    links:
+      - db
 
 volumes:
   php-fpm-socket:

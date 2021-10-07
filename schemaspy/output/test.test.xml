@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><database name="test" schema="test" type="MySQL - 8.0.26">
+   <tables>
+      <table catalog="test" name="hoge" numRows="0" remarks="" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="INT" typeCode="4"/>
+      </table>
+   </tables>
+</database>
