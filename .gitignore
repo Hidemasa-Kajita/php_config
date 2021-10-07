@@ -1,11 +1,11 @@
-mysql/data
+infra/mysql/data
 
-redis/data
+infra/redis/data
 
-schemaspy/output
+tools/schemaspy/output
+
+tools/redisinsight/*
 
 # ignore log files
 *.log
 logs
-
-redisinsight/*

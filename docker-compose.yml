@@ -1,15 +1,16 @@
 version: '3'
+
 services:
   # web server
   nginx:
     container_name: nginx
-    build: ./nginx
+    build: ./infra/nginx
     volumes:
       - php-fpm-socket:/var/run/php-fpm
-      - ./nginx/conf/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./infra/nginx/conf/default.conf:/etc/nginx/conf.d/default.conf
+      - ./infra/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       - ./project/html:/var/www/html
-      - ./nginx/logs:/var/log/nginx
+      - ./infra/nginx/logs:/var/log/nginx
     ports:
       - 8080:80
     restart: always
@@ -17,7 +18,7 @@ services:
   # backend
   php:
     container_name: php
-    build: ./php
+    build: ./infra/php
     volumes:
       - php-fpm-socket:/var/run/php-fpm 
       - ./project/html:/var/www/html
@@ -36,9 +37,9 @@ services:
       MYSQL_PASSWORD: dev
       TZ: Asia/Tokyo
     volumes:
-      - ./mysql/data:/var/lib/mysql
-      - ./mysql/conf/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./mysql/logs:/var/log/mysql
+      - ./infra/mysql/data:/var/lib/mysql
+      - ./infra/mysql/conf/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./infra/mysql/logs:/var/log/mysql
     restart: always
 
   # cache DB
@@ -48,7 +49,7 @@ services:
     ports:
       - 16379:6379
     volumes:
-      - ./redis/data:/data
+      - ./infra/redis/data:/data
 
   # redis client
   redisinsight:
@@ -57,7 +58,7 @@ services:
     ports:
       - 8001:8001
     volumes:
-      - ./redisinsight:/db
+      - ./tools/redisinsight:/db
 
   # DB client
   adminer:
@@ -84,9 +85,9 @@ services:
     container_name: schemaspy
     image: schemaspy/schemaspy:snapshot
     volumes:
-      - ./schemaspy/output:/output
-      - ./schemaspy/config:/config
-      - ./schemaspy/driver:/drivers
+      - ./tools/schemaspy/output:/output
+      - ./tools/schemaspy/config:/config
+      - ./tools/schemaspy/driver:/drivers
     command: ['-configFile', '/config/schemaspy.properties']
     depends_on:
       - mysql
