@@ -10,6 +10,13 @@ tasks:
       - rm -rf ./tools/minio
       - rm -rf ./tools/redisinsight
       - rm -rf ./tools/schemaspy/output
+      - mkdir -p ./infra/mysql/data
+      - mkdir -p ./infra/mysql/logs
+      - mkdir -p ./infra/nginx/logs
+      - mkdir -p ./infra/redis/data
+      - mkdir -p ./tools/minio
+      - mkdir -p ./tools/redisinsight
+      - mkdir -p ./tools/schemaspy/output
       - docker compose build --no-cache
   build:
     cmds:
